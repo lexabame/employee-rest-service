@@ -3,18 +3,39 @@ package com.kenzan.employee.rest.server.resources.model;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.kenzan.employee.rest.server.enums.EmployeeStatus;
+import javax.validation.constraints.NotEmpty;
 
+import com.kenzan.employee.rest.server.enums.EmployeeStatus;
+import com.kenzan.employee.rest.server.resources.validations.EmployeeCreationGroup;
+import com.kenzan.employee.rest.server.resources.validations.EmployeeUpdationGroup;
+
+/**
+ * @author alejandro
+ * This class represent an employee for the clients who will consume our api. Every employee information
+ * our api return should be wrapped by this object.
+ */
 public class EmployeeModel implements Serializable {
 	
 	static final long serialVersionUID = -5996794534128224040L;
 
+	@NotEmpty(groups = {EmployeeUpdationGroup.class})
 	private String id;
+	
+	@NotEmpty( groups = {EmployeeCreationGroup.class, EmployeeUpdationGroup.class})
 	private String name;
+	
 	private String middleInitial;
+	
 	private String lastName;
+	
+	@NotEmpty( groups = {EmployeeCreationGroup.class, EmployeeUpdationGroup.class})
+	private String email;
+	
+	@NotEmpty( groups = {EmployeeCreationGroup.class, EmployeeUpdationGroup.class})
 	private Date dateOfBirth;
-	private EmployeeStatus status;
+	
+	@NotEmpty( groups = {EmployeeCreationGroup.class, EmployeeUpdationGroup.class})
+	private Date dateOfEmployment;
 	
 	public String getId() {
 		return id;
@@ -55,13 +76,21 @@ public class EmployeeModel implements Serializable {
 	public void setDateOfBirth(Date dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
-	
-	public EmployeeStatus getStatus() {
-		return status;
+
+	public String getEmail() {
+		return email;
 	}
-	
-	public void setStatus(EmployeeStatus status) {
-		this.status = status;
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public Date getDateOfEmployment() {
+		return dateOfEmployment;
+	}
+
+	public void setDateOfEmployment(Date dateOfEmployment) {
+		this.dateOfEmployment = dateOfEmployment;
 	}
 
 	@Override
@@ -69,11 +98,12 @@ public class EmployeeModel implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((dateOfBirth == null) ? 0 : dateOfBirth.hashCode());
+		result = prime * result + ((dateOfEmployment == null) ? 0 : dateOfEmployment.hashCode());
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
 		result = prime * result + ((middleInitial == null) ? 0 : middleInitial.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		return result;
 	}
 
@@ -90,6 +120,16 @@ public class EmployeeModel implements Serializable {
 			if (other.dateOfBirth != null)
 				return false;
 		} else if (!dateOfBirth.equals(other.dateOfBirth))
+			return false;
+		if (dateOfEmployment == null) {
+			if (other.dateOfEmployment != null)
+				return false;
+		} else if (!dateOfEmployment.equals(other.dateOfEmployment))
+			return false;
+		if (email == null) {
+			if (other.email != null)
+				return false;
+		} else if (!email.equals(other.email))
 			return false;
 		if (id == null) {
 			if (other.id != null)
@@ -111,12 +151,9 @@ public class EmployeeModel implements Serializable {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (status == null) {
-			if (other.status != null)
-				return false;
-		} else if (!status.equals(other.status))
-			return false;
 		return true;
 	}
 
+	
+	
 }

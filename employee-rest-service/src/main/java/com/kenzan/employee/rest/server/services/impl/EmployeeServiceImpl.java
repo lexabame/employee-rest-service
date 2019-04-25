@@ -9,10 +9,16 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kenzan.employee.rest.server.entities.EmployeeEntity;
-import com.kenzan.employee.rest.server.exceptions.EntityNotFoundException;
+import com.kenzan.employee.rest.server.enums.EmployeeStatus;
 import com.kenzan.employee.rest.server.repositories.EmployeeRepository;
 import com.kenzan.employee.rest.server.services.api.EmployeeService;
+import com.kenzan.employee.rest.server.services.exceptions.EntityAlreadyExistsException;
+import com.kenzan.employee.rest.server.services.exceptions.EntityNotFoundException;
 
+/**
+ * @author alejandro
+ * Component providing business logic operations for employees
+ */
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 	
@@ -42,6 +48,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Transactional(isolation = Isolation.READ_COMMITTED, readOnly = false)
 	public EmployeeEntity createEmployee(EmployeeEntity employee) {
 		
+		EmployeeEntity employeeEntity = employeeRepository.findEmployeeEntityByEmail(employee.getEmail());
+		
+		if(employeeEntity != null){
+			throw new EntityAlreadyExistsException("ERROR-0002", "The email is already in use");
+		}
+		
+		employee.setStatus(EmployeeStatus.ACTIVE);
+		
 		return employeeRepository.save(employee);
 		
 	}
@@ -56,12 +70,22 @@ public class EmployeeServiceImpl implements EmployeeService {
 			throw new EntityNotFoundException("ERROR-0001", "Employee entity was not found");
 		}
 		
+        EmployeeEntity employeeEntity = employeeRepository.findEmployeeEntityByEmail(employee.getEmail());
+		
+		if(employeeEntity != null){
+			throw new EntityAlreadyExistsException("ERROR-0002", "The email is already in use");
+		}
+		
+		
 		EmployeeEntity employeeToUpdate = employeeOptional.get();
 		
+		//we are passing the new info to the existing entity and then saving it
 		employeeToUpdate.setName(employee.getName());
 		employeeToUpdate.setMiddleInitial(employee.getMiddleInitial());
 		employeeToUpdate.setLastName(employee.getLastName());
+		employeeToUpdate.setEmail(employee.getEmail());
 		employeeToUpdate.setDateOfBirth(employee.getDateOfBirth());
+		employeeToUpdate.setDateOfEmployment(employee.getDateOfEmployment());
 		employeeToUpdate.setStatus(employee.getStatus());
 		
 		return employeeRepository.save(employeeToUpdate);

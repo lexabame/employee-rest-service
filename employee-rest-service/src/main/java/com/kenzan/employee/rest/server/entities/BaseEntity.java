@@ -6,6 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+//Base entity to create others as of this
 @MappedSuperclass
 public class BaseEntity {
 	
