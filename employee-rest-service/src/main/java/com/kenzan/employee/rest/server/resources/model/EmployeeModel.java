@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import com.kenzan.employee.rest.server.enums.EmployeeStatus;
 import com.kenzan.employee.rest.server.resources.validations.EmployeeCreationGroup;
@@ -31,10 +32,10 @@ public class EmployeeModel implements Serializable {
 	@NotEmpty( groups = {EmployeeCreationGroup.class, EmployeeUpdationGroup.class})
 	private String email;
 	
-	@NotEmpty( groups = {EmployeeCreationGroup.class, EmployeeUpdationGroup.class})
+	@NotNull( groups = {EmployeeCreationGroup.class, EmployeeUpdationGroup.class})
 	private Date dateOfBirth;
 	
-	@NotEmpty( groups = {EmployeeCreationGroup.class, EmployeeUpdationGroup.class})
+	@NotNull( groups = {EmployeeCreationGroup.class, EmployeeUpdationGroup.class})
 	private Date dateOfEmployment;
 	
 	public String getId() {
