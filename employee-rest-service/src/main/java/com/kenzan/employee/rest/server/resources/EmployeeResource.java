@@ -42,6 +42,7 @@ public class EmployeeResource{
 	public ResponseEntity<EmployeeModel> getEmployee(@PathVariable String id) {
 		EmployeeEntity employeeEntity = employeeService.getEmployeeById(Long.valueOf(id));
 		EmployeeModel employeeModel = employeeMapper.map(employeeEntity);
+                System.out.println("Employee retrieved from the database");
 		return new ResponseEntity<>(employeeModel, HttpStatus.OK);
 	}
 	
