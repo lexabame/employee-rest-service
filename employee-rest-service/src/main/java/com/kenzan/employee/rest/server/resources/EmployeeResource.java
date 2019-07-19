@@ -44,7 +44,6 @@ public class EmployeeResource{
 		EmployeeEntity employeeEntity = employeeService.getEmployeeById(Long.valueOf(id));
 		EmployeeModel employeeModel = employeeMapper.map(employeeEntity);
                 System.out.println("Employee retrieved from the database");
-                System.out.println("Before returning");
 		return new ResponseEntity<>(employeeModel, HttpStatus.OK);
 	}
 	
